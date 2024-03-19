@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valorant Instalocker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    @keyframes rainbow {
+      0% { color: red; }
+      20% { color: orange; }
+      40% { color: yellow; }
+      60% { color: green; }
+      80% { color: blue; }
+      100% { color: violet; }
+    }
+
+    h2 {
+      animation: rainbow 5s infinite;
+      font-size: 36px;
+      margin: 0; /* Remove default margin */
+      padding: 20px 0; /* Add padding to top and bottom */
+      text-align: center; /* Center-align text */
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="form-wrapper sign-in">
+      <form id="lockAgentForm">
+        <h2>Valorant Instalocker</h2>
+        <div class="input-group">
+          <input type="text" name="region" placeholder="Region (e.g., NA)" required>
+          <label for="">Region</label>
+        </div>
+        <div class="input-group">
+          <select name="agent" required>
+            <option value="" disabled selected>Select Preferred Agent</option>
+            {% for agent in agents %}
+              <option value="{{ agent }}">{{ agent }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit">Lock</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('lockAgentForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      var formData = new FormData(this);
+      fetch('/lock_agent', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  </script>
+</body>
+</html>
